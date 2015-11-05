@@ -1,42 +1,72 @@
+import {
+  describe,
+  it,
+  beforeEach,
+  afterEach
+} from 'mocha';
+import { expect } from 'chai';
 import Ember from 'ember';
-import { module, test } from 'qunit';
-import startApp from 'hello-ember/tests/helpers/start-app';
+import startApp from '../helpers/start-app';
 
-module('Acceptance | routing', {
-  beforeEach: function() {
-    this.application = startApp();
-  },
 
-  afterEach: function() {
-    Ember.run(this.application, 'destroy');
-  }
-});
+describe('Acceptance: Routing', function() {
+  var application;
 
-test('visiting /hello', function(assert) {
-  visit('/hello');
-
-  andThen(function() {
-    assert.equal(currentURL(), '/hello');
+  beforeEach(function() {
+    application = startApp();
   });
-});
 
-
-test('/hello should render hello template', function(assert) {
-  visit('/hello');
-  andThen(() => assert.equal(find('h4').text(), 'Hello!'));
-});
-
-test('visiting /about', function(assert) {
-  visit('/about');
-
-  andThen(function() {
-    assert.equal(currentURL(), '/about');
+  afterEach(function() {
+    Ember.run(application, 'destroy');
   });
-});
 
+  it('shows the landing page', function() {
+    visit('/');
 
-test('/about should render about template', function(assert) {
-  visit('/about');
-  andThen(() => assert.equal(find('h4').text(), 'About'));
+    andThen(function() {
+      expect(find('h2').text()).to.eq("Welcome to Ember Routing Practice!");
+    });
+  });
+
+  it('has a link to the hello page', function(){
+    visit('/');
+    andThen(function(){
+      let link = find('a.hello');
+      expect(link.text()).to.eq('hello');
+      expect(link.attr('href')).to.eq('/hello');
+    });
+  });
+
+  it('shows the hello page', function(){
+    visit('/');
+    click(".hello");
+    andThen(function() {
+      expect(find('h4').text()).to.eq("Hello!");
+    });
+  });
+
+  it('has a link to the about page', function(){
+    visit('/');
+    andThen(function(){
+      let link = find('a.about');
+      expect(link.text()).to.eq('about');
+      expect(link.attr('href')).to.eq('/about');
+    });
+  });
+
+  it('shows the about page', function(){
+    visit('/');
+    click(".about");
+    andThen(function() {
+      expect(find('h4').text()).to.eq("About");
+    });
+  });
+
+  it('shows the individual contributors pages, nested under /contributors', function(){
+    visit('/contributors/sophie');
+    andThen(function() {
+      expect(find('p').text()).to.eq("Sophie is a contributor to this project.");
+    });
+  });
 });
 
