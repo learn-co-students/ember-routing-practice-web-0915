@@ -31,7 +31,7 @@ describe('Acceptance: Routing', function() {
   it('has a link to the hello page', function(){
     visit('/');
     andThen(function(){
-      let link = find('a.hello');
+      let link = $("li.hello a");
       expect(link.text()).to.eq('hello');
       expect(link.attr('href')).to.eq('/hello');
     });
@@ -39,7 +39,7 @@ describe('Acceptance: Routing', function() {
 
   it('shows the hello page', function(){
     visit('/');
-    click(".hello");
+    click(".hello a");
     andThen(function() {
       expect(find('h4').text()).to.eq("Hello!");
     });
@@ -48,7 +48,7 @@ describe('Acceptance: Routing', function() {
   it('has a link to the about page', function(){
     visit('/');
     andThen(function(){
-      let link = find('a.about');
+      let link = $("li.about a");
       expect(link.text()).to.eq('about');
       expect(link.attr('href')).to.eq('/about');
     });
@@ -56,7 +56,7 @@ describe('Acceptance: Routing', function() {
 
   it('shows the about page', function(){
     visit('/');
-    click(".about");
+    click(".about a");
     andThen(function() {
       expect(find('h4').text()).to.eq("About");
     });
